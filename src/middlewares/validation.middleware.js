@@ -16,8 +16,8 @@ const validateFields = (req, res, next) => {
 //* Validacion de usuarios creados
 exports.CreateUserValidation = [
     body('name').notEmpty().withMessage('Name is required'), //Nombre no puede estar vacio y si esta vacio se envia un mesaje 'el nombre es requerido'
-    body('email').notEmpty().withMessage('email is required'),
-    body('email').notEmpty().withMessage('email is invalid'),
+    body('email').notEmpty().withMessage('Email is required'),
+    body('email').notEmpty().withMessage('Email is invalid'),
     body('password').custom(value => {
         // Validaciones personalizados para contraseña
         if (value.length < 8) { // Option #2 (!/^.{8,}$/.test(value))
@@ -45,11 +45,38 @@ exports.CreateUserValidation = [
     validateFields,
 ];
 
-//* Validacion para las reparaciones
-exports.createRepairValidation = [
-    body('date').notEmpty().withMessage('is required'),
-    body('userId').notEmpty().withMessage('is required'),
+//* Validacion de usuarios actualizados
+exports.updateUserValidation = [
+    body('name').notEmpty().withMessage('name is required'),
+    body('email').notEmpty().withMessage('Email is required'),
     validateFields,
 ];
 
-// Falta validacion para actualizar usuario y reparacion en validationMiddelware.js
+//* Validacion de usuarios eliminados
+exports.deleteUserValidation = [
+    body('id').notEmpty().withMessage('Id is required'),
+    body('status').notEmpty().withMessage('Status is required'),
+    validateFields,
+];
+
+
+//* Validacion de reparaciones creadas
+exports.createRepairValidation = [
+    body('date').notEmpty().withMessage('Date is required'),
+    body('userId').notEmpty().withMessage('UserId is required'),
+    validateFields,
+];
+
+//* Validacion de reparaciones actualizar
+exports.updateRepairValidation = [
+    body('id').notEmpty().withMessage('Id is required'),
+    body('status').notEmpty().withMessage('Status is required'),
+    validateFields,
+];
+
+//* Validacion de reparaciones Eliminar
+exports.deleteRepairValidation = [
+    body('id').notEmpty().withMessage('Id is required'),
+    body('status').notEmpty().withMessage('Status is required'),
+    validateFields,
+];

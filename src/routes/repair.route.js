@@ -21,7 +21,7 @@ router
     .use('/:id', repairMiddleware.validRepair)
     .route('/:id')
     .get(repairController.searchOneRepair)
-    .patch(repairController.updateRepair)
-    .delete(repairController.deleteRepair);
+    .patch(validationMiddleware.updateRepairValidation, repairController.updateRepair)
+    .delete(validationMiddleware.deleteRepairValidation, repairController.deleteRepair);
 
 module.exports = router;

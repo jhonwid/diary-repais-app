@@ -23,7 +23,7 @@ router
     .use('/.id', userMiddleware.ValidUser)
     .route('/:id')
     .get(userController.searchOneUser)
-    .patch(userController.updateUser)
-    .delete(userController.deleteUser);
+    .patch(validationMiddleware.updateUserValidation, userController.updateUser)
+    .delete(validationMiddleware.deleteUserValidation, userController.deleteUser);
 
 module.exports = router;
