@@ -4,11 +4,12 @@ require('dotenv').config();
 const app = require('./app.js');
 const { db } = require('./database/config.js');
 
+//* Configuracion de la base de datos
 db.authenticate()
     .then(() => console.log('Database connected...🤞'))
     .catch((err) => console.log(err));
 
-db.sync()
+db.sync({ force: false })
     .then(() => console.log('Database synced...😁'))
     .catch((err) => console.log(err));
 

@@ -19,3 +19,23 @@ exports.ValidUser = catchAsync(async (req, res, next) => {
     req.user = user;
     next();
 });
+
+exports.existUserEmail = async (req, res, next) => {
+    const { email } = req.body;
+
+    const user = await User.findOne({
+        where: {
+            email: email.toLowerCase(),
+            status: 'available',
+        },
+    });
+
+    if (!user) {
+        return res.status(404).json({
+            status: 'error',
+            message: `User with email id: ${email} not found`,
+        });
+    }
+    req.user = user
+    next();
+};

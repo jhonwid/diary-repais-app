@@ -9,16 +9,16 @@ const authenticationMiddleware = require('./../middlewares/authentication.middle
 
 const router = express.Router();
 
-//* Rutas de las funciones asincronas
-router.post('/login', userController.login);
-
+//* Rutas de las funciones asincronas de usuario
 router
     .route('/')
     .get(authenticationMiddleware.protect, userController.searchAllUser)
     .post(validationMiddleware.CreateUserValidation, userController.createUser);
 
+router.post('/login', userMiddleware.existUserEmail, userController.login);
+
 router.use(authenticationMiddleware.protect);
-// Falta validacion para actualizar, eliminar. login usuario y reparacion en validationMiddelware.js
+
 router
     .use('/.id', userMiddleware.ValidUser)
     .route('/:id')

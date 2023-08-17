@@ -15,6 +15,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
 
     if (!token) {
+        // res.status(401).json({
+        //     status: 'error',
+        //     message: 'You are not logged in!, Please log in to get access',
+        // });
         return next(
             new AppError('You are not logged in!, Please log in to get access', 401)
         );
@@ -28,11 +32,15 @@ exports.protect = catchAsync(async (req, res, next) => {
     const user = await User.findOne({
         where: {
             id: decoded.id,
-            status: 'active',
+            status: 'available',
         },
     });
 
     if (!user) {
+        // res.status(401).json({
+        //     status: 'error',
+        //     message: 'The owner of this token is not longer available',
+        // });        
         return next(
             new AppError('The owner of this token is not longer available', 401)
         );
@@ -69,6 +77,10 @@ exports.protectAccountOwner = (req, res, next) => {
 exports.restrictTo = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.sessionUser.role)) {
+            // res.status(403).json({
+            //     status: 'error',
+            //     message: 'You do not have permission to perform this action.',
+            // });                
             return next(
                 new AppError('You do not have permission to perform this action.', 403)
             );

@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { db } = require('./../database/config.js');
+const bcrypt = require('bcryptjs');
+const generateJWT = require('./../utils/jwt.js');
 
 const User = db.define('users', {
     id: {
@@ -34,6 +36,13 @@ const User = db.define('users', {
         allowNull: false,
         defaultValue: 'available',
     },
+    // }, { //* Crear contraseña encriptada por medio de un hooks
+    //     hooks: {
+    //         beforeCreate: async (user) => {
+    //             const salt = await bcrypt.genSalt(10);
+    //             const secretPassword = await bcrypt.hash(user.password, salt)
+    //             user.password = secretPassword;
+    //         },
+    //     },
 });
-
 module.exports = User;

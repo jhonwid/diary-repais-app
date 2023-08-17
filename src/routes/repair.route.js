@@ -9,16 +9,17 @@ const authenticationMiddleware = require('./../middlewares/authentication.middle
 
 const router = express.Router();
 
+//* Rutas de las funciones asincronas reparaciones
 router.use(authenticationMiddleware.protect);
 
-//* Rutas
 router
     .route('/')
-    .get(repairController.searchAllRepairs)
+    .get(authenticationMiddleware.restrictTo('employee'), repairController.searchAllRepairs)
     .post(validationMiddleware.createRepairValidation, repairController.createRepair);
-// Falta validacion para actualizar usuario y reparacion en validationMiddelware.js
+
 router
     .use('/:id', repairMiddleware.validRepair)
+    .use(authenticationMiddleware.restrictTo('employee'))
     .route('/:id')
     .get(repairController.searchOneRepair)
     .patch(validationMiddleware.updateRepairValidation, repairController.updateRepair)

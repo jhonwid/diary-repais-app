@@ -17,6 +17,17 @@ const Repair = db.define('notes', {
         allowNull: false,
         field: 'user_id',
     },
+
+    motorsNumber: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+
+    description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+
     status: {
         type: DataTypes.ENUM('completed', 'cancelled', 'pending'),
         allowNull: false,

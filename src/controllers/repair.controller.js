@@ -30,21 +30,7 @@ exports.searchAllRepairs = async (req, res) => {
 //* Buscar una sola reparacion por id
 exports.searchOneRepair = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        const repair = await Repair.findOne({
-            where: {
-                id,
-                status: 'pending',
-            },
-        });
-
-        if (!repair) {
-            return res.status(404).json({
-                status: 'error',
-                message: `Repair with id ${id} is not pending😫`,
-            });
-        }
+        const { repair } = req;
 
         return res.status(200).json({
             status: 'success',
@@ -54,7 +40,7 @@ exports.searchOneRepair = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             status: 'fail',
-            message: 'Internal server error',
+            message: 'Something went very wrong! 😱',
             error,
         });
     }
@@ -87,19 +73,17 @@ exports.updateRepair = async (req, res) => {
     try {
         const { repair } = req;
 
-        const { status } = req.body;
-
-        await repair.update({ status });
+        await repair.update({ status: 'completed' });
 
         return res.status(200).json({
             status: 'success',
-            message: 'Repair updated successfully...🥳',
+            message: 'Repair update successfully😁',
         });
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             status: 'fail',
-            message: 'Internal server error...🙃',
+            message: 'Something went very wrong! 😱',
             error,
         });
     }
@@ -108,7 +92,7 @@ exports.updateRepair = async (req, res) => {
 //* Eliminar reparacion por id
 exports.deleteRepair = async (req, res) => {
     try {
-        const { repair } = req.params;
+        const { repair } = req;
 
         await repair.update({ status: 'deleted' });
 

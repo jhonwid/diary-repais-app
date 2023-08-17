@@ -85,43 +85,63 @@ exports.deleteUser = catchAsync(async (req, res) => {
 });
 
 //* Login Usuario
-exports.login = async (req, res) => {
-    try {
+//! Que no salga la contraseña en el POSTMAN
+// exports.login = async (req, res) => {
+//     try {
 
-        const { email, password } = require.body;
+//         const { email, password } = require.body;
 
-        const user = await User.findOne({
-            where: {
-                email,
-                status: 'available',
-            }
-        });
+//         const user = await User.findOne({
+//             where: {
+//                 email,
+//                 status: 'available',
+//             }
+//         });
 
-        if (!user) {
-            return res.status(400).json({
-                status: 'fail',
-                message: 'Invalid credentials',
-            });
-        }
+//         if (!user) {
+//             return res.status(400).json({
+//                 status: 'fail',
+//                 message: 'Invalid credentials',
+//             });
+//         }
 
-        if (!(await bcrypt.compare(password, user.password))) {
-            return res.status(400).json({
-                status: 'fail',
-                message: 'Invalid credentials',
-            });
-        }
+//         if (!(await bcrypt.compare(password, user.password))) {
+//             return res.status(400).json({
+//                 status: 'fail',
+//                 message: 'Invalid credentials',
+//             });
+//         }
 
-        const token = await generateJWT(user.id);
+//         const token = await generateJWT(user.id);
 
-        return res.status(200).json({
-            status: 'success',
-            token,
-            user,
-        });
-    } catch (error) {
-        return res.status(500).json({
-            status: 'fail',
-            message: 'Internal server error',
+//         return res.status(200).json({
+//             status: 'success',
+//             token,
+//             user,
+//         });
+//     } catch (error) {
+//         return res.status(500).json({
+//             status: 'fail',
+//             message: 'Internal server error',
+//         });
+//     }
+// };
+exports.login = async (req, res, next) => {
+    const { user } = req;
+    const { password } = req.body;
+
+    if (!(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({
+            status: 'error',
+            message: 'Incorrect email or password',
         });
     }
+
+    const token = await generateJWT(user.id)
+
+    res.status(200).json({
+        status: 'success',
+        token,
+        user,
+    });
 };
